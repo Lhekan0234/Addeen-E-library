@@ -20,7 +20,6 @@ function Upload() {
   const [statusMessage, setStatusMessage] = useState('');
   const navigate = useNavigate();
 
-  // Price assignment based on selected category
   const categoryPrices = {
     'Fiqh': 2000,
     'Hadith': 2000,
@@ -60,7 +59,6 @@ function Upload() {
     navigate('/login');
   };
 
-  // Upload handler called after successful Paystack transaction
   const executeFileUpload = async (paymentRef) => {
     try {
       setLoading(true);
@@ -87,7 +85,6 @@ function Upload() {
       setStatusMessage('');
       alert("Congratulations, your book has successfully been added to our collection");
       
-      // Reset form fields
       setTitle('');
       setAuthor('');
       setDescription('');
@@ -102,7 +99,6 @@ function Upload() {
     }
   };
 
-  // Form submission initiates Paystack payment
   const handleInitiatePayment = (e) => {
     e.preventDefault();
     if (!file) return alert("Please select a PDF document to upload!");
@@ -112,14 +108,13 @@ function Upload() {
     script.async = true;
     script.onload = () => {
       let handler = window.PaystackPop.setup({
-        key: 'pk_test_5f0172fdaa8509d71791fe726c64007af3518bc6', // Replace with your Paystack Public Key
+        key: 'pk_test_5f0172fdaa8509d71791fe726c64007af3518bc6',
         email: user.email,
-        amount: currentPrice * 100, // Paystack operates in kobo
+        amount: currentPrice * 100,
         currency: 'NGN',
         ref: '' + Math.floor((Math.random() * 1000000000) + 1),
         callback: function(response) {
-          // Payment Successful -> Trigger upload process
-          alert("Congratulations, your payment is successful; your upload is in progress.");
+          setStatusMessage("Congratulations, your payment is successful; your upload is in progress.");
           executeFileUpload(response.reference);
         },
         onClose: function() {
@@ -135,6 +130,7 @@ function Upload() {
     return <div style={{ textAlign: 'center', padding: '100px', color: '#1e3a8a', fontWeight: 'bold' }}>Authenticating Author Portal...</div>;
   }
 
+  // --- INLINE MODAL PROMPT FOR UNAUTHENTICATED USERS ---
   if (!user) {
     return (
       <div style={{ 
@@ -144,12 +140,22 @@ function Upload() {
         backgroundPosition: 'center',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        padding: '20px'
       }}>
-        <div style={{ maxWidth: '450px', backgroundColor: '#ffffff', padding: '40px', borderRadius: '8px', boxShadow: '0 4px 20px rgba(0,0,0,0.2)', textAlign: 'center' }}>
-          <h2 style={{ color: '#1e3a8a', marginBottom: '15px' }}>Access Restricted</h2>
-          <p style={{ color: '#64748b', marginBottom: '25px' }}>Logged in author account required.</p>
-          <Link to="/login" style={{ padding: '12px 25px', backgroundColor: '#1e3a8a', color: '#fff', borderRadius: '6px', textDecoration: 'none', fontWeight: 'bold' }}>Login</Link>
+        <div style={{ maxWidth: '420px', width: '100%', backgroundColor: '#ffffff', padding: '35px', borderRadius: '12px', boxShadow: '0 10px 25px rgba(0,0,0,0.3)', textAlign: 'center' }}>
+          <h2 style={{ color: '#1e3a8a', marginTop: 0, marginBottom: '10px' }}>Authentication Required</h2>
+          <p style={{ color: '#64748b', marginBottom: '25px', fontSize: '0.95rem', lineHeight: '1.5' }}>
+            Please login to your author account to access the publishing portal.
+          </p>
+          <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
+            <Link to="/login" style={{ padding: '10px 20px', backgroundColor: '#1e3a8a', color: '#fff', borderRadius: '6px', textDecoration: 'none', fontWeight: 'bold', fontSize: '0.9rem' }}>
+              Login Now
+            </Link>
+            <Link to="/" style={{ padding: '10px 20px', backgroundColor: '#e2e8f0', color: '#334155', borderRadius: '6px', textDecoration: 'none', fontWeight: 'bold', fontSize: '0.9rem' }}>
+              Home
+            </Link>
+          </div>
         </div>
       </div>
     );
@@ -164,14 +170,17 @@ function Upload() {
         backgroundPosition: 'center',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        padding: '20px'
       }}>
-        <div style={{ maxWidth: '480px', backgroundColor: '#ffffff', padding: '40px', borderRadius: '8px', boxShadow: '0 4px 20px rgba(0,0,0,0.2)', textAlign: 'center' }}>
-          <h2 style={{ color: '#dc2626', marginBottom: '15px' }}>Author Portal Restricted</h2>
-          <p style={{ color: '#64748b', marginBottom: '25px' }}>Your account is registered as a Reader. Readers are restricted to downloading books.</p>
+        <div style={{ maxWidth: '440px', width: '100%', backgroundColor: '#ffffff', padding: '35px', borderRadius: '12px', boxShadow: '0 10px 25px rgba(0,0,0,0.3)', textAlign: 'center' }}>
+          <h2 style={{ color: '#dc2626', marginTop: 0, marginBottom: '10px' }}>Author Access Restricted</h2>
+          <p style={{ color: '#64748b', marginBottom: '25px', fontSize: '0.95rem', lineHeight: '1.5' }}>
+            Your account is registered as a Reader. Please fill in the correct details to continue.
+          </p>
           <div style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
-            <button onClick={() => navigate('/reader')} style={{ padding: '10px 20px', backgroundColor: '#1e3a8a', color: '#fff', border: 'none', borderRadius: '6px', fontWeight: 'bold', cursor: 'pointer' }}>Catalogue Portal</button>
-            <button onClick={handleLogout} style={{ padding: '10px 20px', backgroundColor: '#dc2626', color: '#fff', border: 'none', borderRadius: '6px', fontWeight: 'bold', cursor: 'pointer' }}>Logout</button>
+            <button onClick={() => navigate('/reader')} style={{ padding: '10px 18px', backgroundColor: '#1e3a8a', color: '#fff', border: 'none', borderRadius: '6px', fontWeight: 'bold', cursor: 'pointer', fontSize: '0.9rem' }}>Catalogue Portal</button>
+            <button onClick={handleLogout} style={{ padding: '10px 18px', backgroundColor: '#dc2626', color: '#fff', border: 'none', borderRadius: '6px', fontWeight: 'bold', cursor: 'pointer', fontSize: '0.9rem' }}>Logout</button>
           </div>
         </div>
       </div>

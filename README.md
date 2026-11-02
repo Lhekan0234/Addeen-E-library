@@ -42,5 +42,5 @@ Ensure you have Node.js and npm installed on your machine.
 
 1. **Clone the repository:**
    ```bash
-   git clone [https://github.com/Lhekan0234/addeen-e-library.git](https://github.com/Lhekan0234/addeen-e-library.git)
+   git clone [https://github.com/githubpage/your-repository.git]
    cd addeen-e-library
